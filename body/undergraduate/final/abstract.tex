@@ -3,11 +3,16 @@
     \bfseries \zihao{3} 摘要
 \end{center}
 
-\par 农作物产量是农业的一个重要指标，与全国乃至世界的饥饿问题密切相关。中国作为全球最大的玉米生产与消费国，能够在弱先验条件的情况下，在玉米种植早期进行大面积作物产量的准确预估尤为重要。过去的研究表明，地表反射率、叶面积指数等多光谱数据能够有效反映作物的生长特征。同时通过长短期记忆神经网络等能够捕捉时间序列中的内在时空关系的深度学习模型，可以自适应地关注输入序列中的重要生长信息，有效监测作物生长情况。然而，对于分布相对稀疏的作物图像信息，传统的卷积计算方式提取信息效率较低。因此，研究以东北省份作为研究地区，通过直方图统计的方式对遥感产品数据进行降维处理，并构建结合注意力机制和长短期记忆神经网络的深度学习模型，与其他传统机器学习和深度学习模型进行估产效果对比。主要结论如下：
+\par 农作物产量是农业的一个重要指标，与全国乃至世界的饥饿问题密切相关。中国是全球最大的玉米生产与消费国之一，东北地区承载了全国34.3\%的玉米生产量。因此，能够在弱先验条件的情况下对中国东北地区进行大面积的玉米产量预测，可以为我国农业种植管理、土地利用管理、粮食贸易和食品安全决策提供科学参考。
+
+\par 过去的研究表明，地表反射率、叶面积指数等多光谱数据能够有效反映作物的生长特征。同时通过长短期记忆神经网络等能够捕捉时间序列中的内在时空关系的深度学习模型，可以自适应地关注输入序列中的重要生长信息，有效监测作物生长情况。然而，近年来在基于深度学习模型的大面积作物估产的研究中，针对中国东北地区开展玉米产量预测的工作较少。因此，研究以东北省份作为研究地区，从地级市尺度与区县尺度两个研究尺度入手，通过直方图统计的方式对遥感产品数据进行降维处理，并构建结合注意力机制和长短期记忆神经网络的深度学习模型，与其他传统机器学习和深度学习模型进行估产效果对比。从估产精度分析、预测误差分布分析和误差时空分析三个方面展开实验结果分析，探索了不同尺度下的玉米产量估计效果以及产量误差之间潜在的时空分布关系。
+
+\par 研究主要结论如下：
 
 \begin{itemize}
-  \item [（1）] 在地级市尺度上，估产模型的均方根误差 RMSE 为101.21万吨，决定系数$R^2$为0.8244。县级尺度上，模型的均方根误差 RMSE 为 39.42万吨，决定系数$R^2$为0.6141。
-  \item [（2）] 对比其他机器学习与深度学习模型，研究构建的DUAL\_ATT模型通过利用长短期记忆神经网络和能够更加有效地捕捉玉米生长时间序列中的内在时空关系，提取生长特征，取得了更好的估产效果。
+  \item [（1）] 对比其他机器学习与深度学习模型，研究构建的DUAL\_ATT模型通过利用长短期记忆神经网络和能够更加有效地捕捉玉米生长时间序列中的内在时空关系，提取生长特征，取得了更好的估产效果。在地级市尺度上，估产模型的均方根误差 RMSE 为101.21万吨，决定系数$R^2$为0.8244。县级尺度上，模型的均方根误差 RMSE 为 39.42万吨，决定系数$R^2$为0.6141。
+  \item [（2）] 预测值误差分析中，DUAL\_ATT模型的误差值更加均匀分布于理想的误差值区间内，且误差值的绝对值更小，说明DUAL\_ATT模型的预测值更加接近真实值。
+  \item [（3）] 误差时空分析中，高误差值普遍分布在松嫩平原地区城市和县城周边地区。分析发现，该地区属于东北地区的玉米高产量地区，且高产量样本比例较少，导致了该地区玉米产量的普遍低估现象。
 \end{itemize}
 
 \cleardoublepage{}
@@ -15,9 +20,12 @@
     \bfseries \zihao{3} Abstract
 \end{center}
 
-\par Crop yield is an important indicator of agriculture and is closely related to the national and world hunger problem. As the world's largest producer and consumer of corn, it is particularly important for China to be able to make accurate predictions of crop yield over large areas early in corn planting under weak a priori conditions. Past studies have shown that multispectral data such as surface reflectance and leaf area index can effectively reflect the growth characteristics of the crop. Meanwhile, deep learning models that can capture the intrinsic spatio-temporal relationships in time series, such as LSTM neural networks, can adaptively focus on the important growth information in the input series and effectively monitor crop growth. However, for crop image information with relatively sparse distribution, the traditional convolutional computation method is less efficient in extracting information. Therefore, the study takes the northeastern province of China as the research area, and performs dimensionality reduction on remote sensing product data by means of histogram statistics, and constructs a deep learning model combining attention mechanism and LSTM to compare the yield estimation effect with other traditional machine learning and deep learning models. The main conclusions are as follows: 
+\par Crop yield is an important indicator of agriculture and is closely related to the problem of hunger in the country and the world. China is one of the world's largest producers and consumers of maize, and the northeastern region carries 34.3\% of the country's maize production. Therefore, being able to forecast maize production over a large area in northeastern China under weak a priori conditions can provide a scientific reference for agricultural plantation management, land use management, food trade and food security decisions in China.
+
+\par Recent studies have shown that multispectral data such as surface reflectance and leaf area index can effectively reflect the growth characteristics of crops. Meanwhile, deep learning models that can capture the intrinsic spatio-temporal relationships in time series, such as long- and short-term memory neural networks, can adaptively focus on the important growth information in the input series and effectively monitor crop growth. However, in recent years, less work has been conducted on maize yield prediction for northeastern China in studies of large-area crop yield estimation based on deep learning models. Therefore, the study takes the northeastern provinces as the research area, and starts from two research scales: prefecture-level city scale and district and county scale. The histogram statistics are used to reduce the dimensionality of remote sensing product data, and a deep learning model combining attention mechanism and long and short-term memory neural network is constructed to compare the yield estimation effect with other traditional machine learning and deep learning models. The experimental results are analyzed from three aspects: yield estimation accuracy analysis, prediction error distribution analysis and error spatio-temporal analysis, and the potential spatio-temporal distribution relationship between the estimation effect of maize yield and yield error at different scales is explored.
 
 \begin{itemize}
-  \item [（1）] At the city-level scale, the RMSE of the estimation model is $101.21\times 10^4$ tons with the $R^2$ of 0.8244. At the county-level scale, the RMSE of the model is $39.42\times 10^4$ tons with the $R^2$ of 0.6141.
-  \item [（2）] Compared with other traditional machine learning and deep learning models, the DUAL\_ATT model constructed in the study gained better yield estimation results by combining LSTM and being able to more effectively capture the intrinsic spatio-temporal relationships in the maize growth time series and extract growth features.
+  \item [（1）] Compared with other machine learning and deep learning models, the DUAL\_ATT model constructed in this study achieves better yield estimation results by using long and short-term memory neural networks and can more effectively capture the intrinsic spatio-temporal relationships in maize growth time series and extract growth characteristics. At the prefectural scale, the RMSE of the yield estimation model is 1,012,100 tons with a coefficient of determination of 0.8244. At the county scale, the RMSE of the model is 394,200 tons with a coefficient of determination of 0.6141.
+  \item [（2）] In the prediction value error analysis, the error values of the DUAL\_ATT model are more uniformly distributed in the ideal error value interval and the absolute values of the error values are smaller, indicating that the prediction values of the DUAL\_ATT model are closer to the true values.
+  \item [（3）] The high error values in the spatio-temporal analysis were generally distributed in the areas around cities and counties in the Songnen Plain region. The analysis revealed that this region belongs to the high-yielding maize areas in the northeast, and the small proportion of high-yielding samples led to the general underestimation of maize production in this region.
 \end{itemize}
