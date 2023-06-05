@@ -7,9 +7,13 @@
 
 \vskip 10mm
 
-\begin{center}
-    \includegraphics[width=0.5\paperwidth]{logo/zjuchar.pdf}
-\end{center}
+\ifthenelse{\equal{\BlindReview}{true}}
+{}
+{
+  \begin{center}
+      \includegraphics[width=0.5\paperwidth]{logo/zjuchar.pdf}
+  \end{center}
+}
 
 \begin{center}
     \zihao{-1} \heiti \bfseries
@@ -24,9 +28,14 @@
 
 \vskip 20pt
 
-\begin{center}
+
+\ifthenelse{\equal{\BlindReview}{true}}
+{}
+{
+  \begin{center}
     \includegraphics[width=0.17\paperwidth]{logo/zju.pdf}
-\end{center}
+  \end{center}
+}
 
 \vskip 20pt
 

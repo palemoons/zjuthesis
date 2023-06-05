@@ -1,29 +1,5 @@
 \cleardoublepage
 
-\ifthenelse{\equal{\Period}{proposal}}
-{
-  \ifthenelse{\equal{\Type}{thesis}}
-  {
-      % `thesis` content
-      \inputbody{proposal/review/review}
-      \inputbody{proposal/proposal/proposal}
-      \inputbody{proposal/translation/translation}
-      \inputbody{proposal/original/original}
-  }
-  {
-      \ifthenelse{\equal{\Type}{design}}
-      {
-          % `design` content
-          \inputbody{proposal/proposal/proposal}
-          \inputbody{proposal/translation/translation}
-          \inputbody{proposal/original/original}
-          \inputbody{proposal/midcheck/midcheck}
-      }
-      {
-          % Wrong Input
-      }
-  }
-}{}
 \ifthenelse{\equal{\Period}{proposal_divided}}
 {
   \ifthenelse{\equal{\Type}{thesis}}
@@ -58,4 +34,27 @@
       \inputbody{proposal/midcheck/midcheck}
     }{}
   }{}
-}{}
+}
+{
+  \ifthenelse{\equal{\Type}{thesis}}
+  {
+      % `thesis` content
+      \inputbody{proposal/review/review}
+      \inputbody{proposal/proposal/proposal}
+      \inputbody{proposal/translation/translation}
+      \inputbody{proposal/original/original}
+  }
+  {
+      \ifthenelse{\equal{\Type}{design}}
+      {
+          % `design` content
+          \inputbody{proposal/proposal/proposal}
+          \inputbody{proposal/translation/translation}
+          \inputbody{proposal/original/original}
+          \inputbody{proposal/midcheck/midcheck}
+      }
+      {
+          % Wrong Input
+      }
+  }
+}

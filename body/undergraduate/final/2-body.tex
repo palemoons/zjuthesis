@@ -52,7 +52,7 @@
 
 \par 介于以上优点，研究使用了 GEE 平台提供的 Python API，并结合 Shell 和 Python 脚本，批量获取了2000年到2019年18年内4月1日至8月31日的四项产品数据。这些数据分别被划分至地级市尺度和区县尺度，利用全国行政区划矢量数据进行划分。为了方便后续处理，将这些数据在云端先重采样至1km，再下载到本地进行进一步的处理和分析。同理，利用已有的行政区划数据对 ChinaCropPhen1km 数据集进行分割，并按照年份和行政区域分别对其进行存储。
 
-\par 地理空间数据抽象库\cite{warmerdam2008geospatial}（Geospatial Data Abstraction Library, GDAL）是一个开源地理空间数据处理库，它提供了一套完整的工具集，可用于读取、写入、转换和分析各种地理空间数据格式。通过使用 GDAL 对 ChinaCropPhen1km 数据集进行重投影处理，可以将其与 MODIS 产品数据进行匹配，以准确提取玉米种植地区的遥感信息。此外，将两数据集进行掩膜计算可以实现仅保留玉米种植地区的遥感信息，从而排除了其他不相关的信息干扰的目的。通过重投影与掩膜计算，研究成功获得了2000年至2019年地级市尺度以及2000年至2012年区县尺度的玉米遥感特征数据集。
+\par 地理空间数据抽象库\cite{warmerdam2008geospatial}（Geospatial Data Abstraction Library, GDAL）是一个开源地理空间数据处理库，它提供了一套完整的工具集，可用于读取、写入、转换和分析各种地理空间数据格式。通过使用 GDAL 对 ChinaCropPhen1km 数据集进行重投影处理，可以将其与 MODIS 产品数据进行匹配，以准确提取玉米种植地区的遥感信息。此外，将两数据集进行掩膜计算可以实现仅保留玉米种植地区的遥感信息，从而排除了其他不相关的信息干扰的目的。通过重投影与掩膜计算，研究成功获得了2000年至2019年4月1日至8月31日地级市尺度以及2000年至2012年4月1日至8月31日区县尺度，空间分辨率为1km、时间分辨率为8天的玉米遥感特征数据集。
 
 \par 经过数据预处理后，遥感特征数据集可以如\autoref{equ:modis_series}所示：
 
@@ -74,7 +74,7 @@
 
 \par 其中，$y$为地区总产量，每一个样本$(I_t, y_t)$表示了某地区某年份的玉米遥感特征影像和总产量。
 
-\par 为了更好的提取作物生长特征，研究采用直方图降维的方法对样本数据进行降维处理。直方图降维的前提是假设玉米产量与像素空间分布无关，仅与不同像素数量相关。为确定直方图降维范围，减少直方图降维过程中的信息损失，研究首先借助 GDAL 库对训练集各个波段的最大、最小值进行获取，统计了玉米特征样本集中像素值范围，如\autoref{tab:range}所示：
+\par 为了更好地提取作物生长特征，研究采用直方图降维的方法对样本数据进行降维处理。直方图降维的前提是假设玉米产量与像素空间分布无关，仅与不同像素数量相关。为确定直方图降维范围，减少直方图降维过程中的信息损失，研究首先借助 GDAL 库对训练集各个波段的最大、最小值进行获取，统计了玉米特征样本集中像素值范围，如\autoref{tab:range}所示：
 
 \begin{table}
   \centering
@@ -171,7 +171,7 @@
   H=\sum_{t=1}^T \alpha ^t\cdot h^t
 \end{equation}
 
-\par 最后，特征向量将依次经过神经元数量为512、256和1的三个全连接层。其中，每个全连接层都包含了批归一化（BatchNormalize, BN）层、ReLu激活层和Dropout层，随机失活率被分别设定为40\%、20\%和0，最终输出最终的玉米总产量预测值。
+\par 最后，特征向量将依次经过神经元数量为512、256和1的三个全连接层。其中，每个全连接层都包含了批归一化（BatchNormalize, BN）层、ReLu激活层和Dropout层，随机失活率被分别设定为40\%、20\%和0，最终输出玉米总产量预测值。
 
 \par 在模型训练过程中，损失函数选定为L2损失函数；优化器选择了 Adam 优化器；学习率初始值为0.0001；批次大小（Batch Size）为32。
 
@@ -260,8 +260,8 @@
 
 \begin{figure}
   \centering
-  \subcaptionbox{地级市尺度玉米面积分布}[.5\linewidth]{\includegraphics[width=.8\linewidth]{result/violin_city.png}}\hfill
-  \subcaptionbox{区县尺度玉米面积分布}[.5\linewidth]{\includegraphics[width=.8\linewidth]{result/violin_county.png}}\hfill
+  \subcaptionbox{地级市尺度玉米有效面积分布}[.5\linewidth]{\includegraphics[width=.8\linewidth]{result/violin_city.png}}\hfill
+  \subcaptionbox{区县尺度玉米有效面积分布}[.5\linewidth]{\includegraphics[width=.8\linewidth]{result/violin_county.png}}\hfill
   \caption{样本集玉米种植面积分布}
   \label{fig:violin}
 \end{figure}
@@ -274,6 +274,7 @@
   \centering
   \subcaptionbox{\label{fig:scatter_city}地级市尺度预估产量与实际产量的散点图}{\includegraphics[width=.75\linewidth]{result/scatter_city.png}}\hfill
   \subcaptionbox{\label{fig:scatter_county}区县尺度预估产量与实际产量的散点图}{\includegraphics[width=.75\linewidth]{result/scatter_county.png}}
+  \caption{预估产量与实际产量散点图}
 \end{figure}
 
 \par 在地级市尺度的预测值/真实值散点图中，DUAL\_ATT模型的误差值分布最均匀，其回归直线与理想直线最接近。与其它三种LSTM模型DUAL、LSTM\_ATT和LSTM相比，DUAL\_ATT模型的误差分布更加聚集，预测效果更好。卷积神经网络模型（CNN）和随机森林模型（RF）在真实产量较低的区域聚集更为集中，然而当玉米实际总产量更高时，模型的预测值出现了明显的低估。说明两个模型对于玉米产量的泛化能力有限，对于高产量样本的预测能力更差。
@@ -286,34 +287,53 @@
 \subsubsection{地级市尺度误差时空分布分析}
 \par 地级市尺度玉米误差分布如\autoref{fig:error_2017}、\autoref{fig:error_2018}和\autoref{fig:error_2019}所示。
 
+\begin{figure}
+  \centering
+  \includegraphics[width=.85\linewidth]{result/error_2017.png}
+  \caption{2017年地级市尺度误差分布}
+  \label{fig:error_2017}
+\end{figure}
+\begin{figure}
+  \centering
+  \includegraphics[width=.85\linewidth]{result/error_2018.png}
+  \caption{2018年地级市尺度误差分布}
+  \label{fig:error_2018}
+\end{figure}
+\begin{figure}
+  \centering
+  \includegraphics[width=.85\linewidth]{result/error_2019.png}
+  \caption{2019年地级市尺度误差分布}
+  \label{fig:error_2019}
+\end{figure}
+
 \par 注意到在地级市尺度上，玉米的误差分布存在着显著的空间差异。其中辽河平原与三江平原地区的误差普遍较低，而DUAL\_ATT模型的预测值误差相对最小，预测效果更好。较大的误差主要出现在以哈尔滨市为中心的松嫩平原地区。其中，2017年DUAL\_ATT、DUAL、LSTM\_ATT和LSTM模型在松嫩平原地区都出现了产量高估的现象，但DUAL\_ATT较好地缓解了该现象。在2018年和2019年，该地区出现了普遍的产量低估现象，这可能是由于该地区的玉米种植面积大，玉米总产量在东北地区内相对较高。以2019年为例，哈尔滨市、长春市和绥化市的玉米总产量分别为814.78、780.01和722.20万吨，如\autoref{fig:yield_city}所示，三个城市属于高产量地区。由于将东北地区划分为地级市尺度后，样本数量相对较少，且高产量地区比例偏低，这导致了在模型训练过程中提取高产量地区作物生长特征的困难，最终导致总产量低估的现象的出现。
 
+\subsubsection{区县尺度误差时空分布分析}
+
+\par 区县尺度玉米误差分布如\autoref{fig:error_2010}、\autoref{fig:error_2011}和\autoref{fig:error_2012}所示，可以发现该尺度下的误差分布更加均匀，且误差普遍较低。其中，部分缺失真实产量数据的地区使用白色填充，这些地区主要是城区，其玉米种植面积较小，因此并没有相应的有效产量数据记录。由于区县尺度下玉米种植面积普遍较小，因此模型在该尺度下的误差分布更加均匀，误差普遍较低。尽管DUAL\_ATT模型的预测效果相较于其他模型有更好的表现，产量低估的情况依然存在，且在松嫩平原地区等高产量地区更加明显，例如齐齐哈尔市龙江区在2012年的实际产量为336.84万吨，而预估产量仅为182.09万吨。因此，虽然区县尺度下的玉米产量估算具有更好的均匀性和准确性，但仍需要进一步探究和完善估算模型，以更好地解决产量低估问题，特别是在高产量地区。
+
+\clearpage
+
 \begin{figure}
   \centering
-  \subcaptionbox{\label{fig:error_2017}2017年地级市尺度误差分布}{\includegraphics[width=.85\linewidth]{result/error_2017.png}}\hfill
-  \subcaptionbox{\label{fig:error_2018}2018年地级市尺度误差分布}{\includegraphics[width=.85\linewidth]{result/error_2018.png}}
-\end{figure}
-\begin{figure}\ContinuedFloat
-  \centering
-  \subcaptionbox{\label{fig:error_2019}2019年地级市尺度误差分布}{\includegraphics[width=.85\linewidth]{result/error_2019.png}}
-  \caption{地级市尺度误差分布}
+  \includegraphics[width=.85\linewidth]{result/error_2010.png}
+  \caption{2010年区县尺度误差分布}
+  \label{fig:error_2010}
 \end{figure}
 \begin{figure}
   \centering
-  \subcaptionbox{\label{fig:error_2010}2010年区县尺度误差分布}
-  {\includegraphics[width=.85\linewidth]{result/error_2010.png}}\hfill
-  \subcaptionbox{\label{fig:error_2011}2011年区县尺度误差分布}
-  {\includegraphics[width=.85\linewidth]{result/error_2011.png}}
+  \includegraphics[width=.85\linewidth]{result/error_2011.png}
+  \caption{2011年区县尺度误差分布}
+  \label{fig:error_2011}
 \end{figure}
-\begin{figure}\ContinuedFloat
+\begin{figure}
   \centering
-  \subcaptionbox{\label{fig:error_2012}2012年区县尺度误差分布}
-  {\includegraphics[width=.85\linewidth]{result/error_2012.png}}
-  \caption{区县尺度尺度误差分布}
+  \includegraphics[width=.85\linewidth]{result/error_2012.png}
+  \caption{2012年区县尺度误差分布}
+  \label{fig:error_2012}
 \end{figure}
 
-\subsubsection{区县尺度误差时空分布分析}
-\par 区县尺度玉米误差分布如\autoref{fig:error_2010}、\autoref{fig:error_2011}和\autoref{fig:error_2012}所示，可以发现该尺度下的误差分布更加均匀，且误差普遍较低。其中，部分缺失真实产量数据的地区使用白色填充，这些地区主要是城区，其玉米种植面积较小，因此并没有相应的有效产量数据记录。由于区县尺度下玉米种植面积普遍较小，因此模型在该尺度下的误差分布更加均匀，误差普遍较低。尽管DUAL\_ATT模型的预测效果相较于其他模型有更好的表现，产量低估的情况依然存在，且在松嫩平原地区等高产量地区更加明显，例如齐齐哈尔市龙江区在2012年的实际产量为336.84万吨，而预估产量仅为182.09万吨。因此，虽然区县尺度下的玉米产量估算具有更好的均匀性和准确性，但仍需要进一步探究和完善估算模型，以更好地解决产量低估问题，特别是在高产量地区。
+\clearpage
 
 \subsection{讨论}
 \par 经过实验结果分析可以发现，通过使用直方图采样来降维遥感图像的方法，可以成功地保留作物生长的特征。此外，通过运用了长短期记忆神经网络和注意力机制，研究构建的模型 DUAL\_ATT 能够有效捕捉时间序列中的内在时空关系。这使得模型在地级市和区县尺度上均取得了相较于其他模型更加精确的预估结果。然而，由于数据集的限制，该玉米估产模型在高产量地区仍然出现了产量低估的现象。此外，在模型构建的过程中，研究仅仅使用了 MODIS 遥感产品数据作为输入，并没有考虑其他地面气象数据的辅助，这也可能导致模型在预估玉米产量时受到气象因素的影响，特别是如干旱和洪涝等极端天气事件。因此，在未来的工作中，应该考虑将其他气象数据作为模型的输入，以提高预估的精度。同时也可以考虑对数据集进行进一步的优化，以减少模型出现产量低估的情况。
